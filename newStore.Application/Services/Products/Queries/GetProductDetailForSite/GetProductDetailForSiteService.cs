@@ -1,9 +1,18 @@
 ﻿using newStore.Application.Interfaces.Contexts;
 using newStore.Common.Dto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using newStore.Application.Interfaces.Contexts;
+using newStore.Common.Dto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace newStore.Application.Services.Products.Queries.GetProductDetailForSite
 {
+   
     public class GetProductDetailForSiteService : IGetProductDetailForSiteService
     {
         private readonly IDataBaseContext _context;
@@ -14,17 +23,20 @@ namespace newStore.Application.Services.Products.Queries.GetProductDetailForSite
         public ResultDto<ProductDetailForSiteDto> Execute(long Id)
         {
             var Product = _context.Products
-                .Include(p=> p.Category)
-                .ThenInclude(p=>p.ParentCategory)
-                .Include(p=>p.ProductImages)
-                .Include(p=> p.ProductFeatures)
-                .Where(p=> p.Id==Id).FirstOrDefault();
+                .Include(p => p.Category)
+                .ThenInclude(p => p.ParentCategory)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductFeatures)
+                .Where(p => p.Id == Id).FirstOrDefault();
 
-            if(Product == null)
+            if (Product == null)
             {
                 throw new Exception("Product Not Found.....");
             }
 
+
+            Product.ViewCount++;
+            _context.SaveChanges();
             return new ResultDto<ProductDetailForSiteDto>()
             {
                 Data = new ProductDetailForSiteDto
@@ -48,8 +60,4 @@ namespace newStore.Application.Services.Products.Queries.GetProductDetailForSite
 
         }
     }
-
-
-
-
 }

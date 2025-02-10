@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using newStore.Application.Interfaces.FacadPatterns;
+using newStore.Application.Services.Products.Queries.GetProductForSite;
 using Microsoft.AspNetCore.Mvc;
+using newStore.Application.Interfaces.FacadPatterns;
+using newStore.Application.Services.Products.Queries.GetProductForSite;
 
-namespace EndPoint.newSite.Controllers
+namespace EndPoint.Site.Controllers
 {
     public class ProductsController : Controller
     {
@@ -15,10 +18,11 @@ namespace EndPoint.newSite.Controllers
         {
             _productFacad = productFacad;
         }
-        public IActionResult Index(string Searchkey, long? CatId = null, int page = 1)
+        public IActionResult Index(Ordering ordering, string Searchkey, long? CatId = null, int page = 1, int pageSize = 20)
         {
-            return View(_productFacad.GetProductForSiteService.Execute(Searchkey, page, CatId).Data);
+            return View(_productFacad.GetProductForSiteService.Execute(ordering, Searchkey, page, pageSize, CatId).Data);
         }
+
 
         public IActionResult Detail(long Id)
         {
