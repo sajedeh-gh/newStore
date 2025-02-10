@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using newStore.Domain.Entities.HomePages;
 
 namespace newStore.Application.Interfaces.Contexts
 {
@@ -21,6 +22,7 @@ namespace newStore.Application.Interfaces.Contexts
         DbSet<Product> Products { get; set; }
         DbSet<ProductImages> ProductImages { get; set; }
         DbSet<ProductFeatures> ProductFeatures { get; set; }
+        DbSet<Slider> Sliders { get; set; }
 
         int SaveChanges(bool acceptAllChangesOnSuccess);
         int SaveChanges();
