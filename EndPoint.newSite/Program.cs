@@ -14,6 +14,7 @@ using newStore.Application.Services.Products.FacadPattern;
 using newStore.Application.Services.Common.Queries.GetMenuItem;
 using newStore.Application.Services.Common.Queries.GetCategory;
 using newStore.Application.Services.HomePages.AddNewSlider;
+using newStore.Application.Services.Common.Queries.GetSlider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,9 @@ builder.Services.AddScoped<IGetCategoryService, GetCategoryService>();
 /////////////////////////////////////////////
 
 builder.Services.AddScoped<IAddNewSliderService, AddNewSliderService>();
+builder.Services.AddScoped<IGetSliderService, GetSliderService>();
+
+
 
 
 
