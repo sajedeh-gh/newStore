@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using newStore.Domain.Entities.HomePages;
 
 namespace newStore.Persistence.Contexts
 {
@@ -24,6 +25,8 @@ namespace newStore.Persistence.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImages> ProductImages { get; set; }
         public DbSet<ProductFeatures> ProductFeatures { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +52,8 @@ namespace newStore.Persistence.Contexts
             modelBuilder.Entity<Product>().HasQueryFilter(p => !p.IsRemoved);
             modelBuilder.Entity<ProductImages>().HasQueryFilter(p => !p.IsRemoved);
             modelBuilder.Entity<ProductFeatures>().HasQueryFilter(p => !p.IsRemoved);
+            modelBuilder.Entity<Slider>().HasQueryFilter(p => !p.IsRemoved);
+
         }
 
         private void SeedData(ModelBuilder modelBuilder)
