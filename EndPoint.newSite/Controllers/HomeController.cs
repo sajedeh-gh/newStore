@@ -44,7 +44,7 @@ namespace EndPoint.newSite.Controllers
                 Sliders = _getSliderService.Execute().Data,
                 PageImages = _homePageImagesService.Execute().Data,
                 Camera = _productFacad.GetProductForSiteService.Execute(Ordering.theNewest
-                , null, 1, 6, 25).Data.Products,
+                , null, 1, 6, 6).Data.Products,
             };
             return View(homePage);
         }
