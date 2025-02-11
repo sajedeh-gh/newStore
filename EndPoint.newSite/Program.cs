@@ -17,6 +17,7 @@ using newStore.Application.Services.HomePages.AddNewSlider;
 using newStore.Application.Services.Common.Queries.GetSlider;
 using newStore.Application.Services.HomePages.AddHomePageImages;
 using newStore.Application.Services.Common.Queries.GetHomePageImages;
+using newStore.Application.Services.Carts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,10 @@ builder.Services.AddScoped<IAddNewSliderService, AddNewSliderService>();
 builder.Services.AddScoped<IGetSliderService, GetSliderService>();
 builder.Services.AddScoped<IAddHomePageImagesService, AddHomePageImagesService>();
 builder.Services.AddScoped<IGetHomePageImagesService, GetHomePageImagesService>();
+
+///////////////////////////////////////////
+builder.Services.AddScoped<ICartService, CartService>();
+
 
 string connectionString = @"Data Source=DESKTOP-OVLK4EA; Initial Catalog=newStoreDb; Integrated Security=True; TrustServerCertificate=True;";
 builder.Services.AddDbContext<DataBaseContext>(options =>

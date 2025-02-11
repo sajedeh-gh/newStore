@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using newStore.Domain.Entities.HomePages;
+using newStore.Domain.Entities.Carts;
 
 namespace newStore.Application.Interfaces.Contexts
 {
@@ -24,7 +25,8 @@ namespace newStore.Application.Interfaces.Contexts
         DbSet<ProductFeatures> ProductFeatures { get; set; }
         DbSet<Slider> Sliders { get; set; }
         DbSet<HomePageImages> HomePageImages { get; set; }
-
+        DbSet<Cart> Carts { get; set; }
+        DbSet<CartItem> CartItems { get; set; }
         int SaveChanges(bool acceptAllChangesOnSuccess);
         int SaveChanges();
         Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken());
