@@ -16,6 +16,7 @@ using newStore.Application.Services.Common.Queries.GetCategory;
 using newStore.Application.Services.HomePages.AddNewSlider;
 using newStore.Application.Services.Common.Queries.GetSlider;
 using newStore.Application.Services.HomePages.AddHomePageImages;
+using newStore.Application.Services.Common.Queries.GetHomePageImages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,12 +48,7 @@ builder.Services.AddScoped<IGetCategoryService, GetCategoryService>();
 builder.Services.AddScoped<IAddNewSliderService, AddNewSliderService>();
 builder.Services.AddScoped<IGetSliderService, GetSliderService>();
 builder.Services.AddScoped<IAddHomePageImagesService, AddHomePageImagesService>();
-
-
-
-
-
-
+builder.Services.AddScoped<IGetHomePageImagesService, GetHomePageImagesService>();
 
 
 
