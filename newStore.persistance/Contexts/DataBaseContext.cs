@@ -26,6 +26,8 @@ namespace newStore.Persistence.Contexts
         public DbSet<ProductImages> ProductImages { get; set; }
         public DbSet<ProductFeatures> ProductFeatures { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<HomePageImages> HomePageImages { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

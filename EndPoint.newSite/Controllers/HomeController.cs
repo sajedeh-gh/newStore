@@ -5,10 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using EndPoint.Site.Models;
+using EndPoint.newSite.Models;
 using newStore.Application.Services.Common.Queries.GetSlider;
-using EndPoint.newSite.Models.ViewModels.HomePages;
-using newStore.Application.Services.Common.Queries.GetHomePageImages;
 using newStore.Application.Interfaces.FacadPatterns;
 using newStore.Application.Services.Products.Queries.GetProductForSite;
 using EndPoint.newSite.Models;
@@ -16,27 +14,27 @@ using newStore.Application.Interfaces.FacadPatterns;
 using newStore.Application.Services.Common.Queries.GetSlider;
 using newStore.Application.Services.Products.Queries.GetProductForSite;
 
-namespace EndPoint.Site.Controllers
+namespace EndPoint.newSite.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGetSliderService _getSliderService;
-        private readonly IGetHomePageImagesService _homePageImagesService;
+      //  private readonly IGetHomePageImagesService _homePageImagesService;
         private readonly IProductFacad _productFacad;
 
         public HomeController(ILogger<HomeController> logger
             , IGetSliderService getSliderService
-            , IGetHomePageImagesService homePageImagesService
+          //  , IGetHomePageImagesService homePageImagesService
            , IProductFacad productFacad)
         {
             _logger = logger;
             _getSliderService = getSliderService;
-            _homePageImagesService = homePageImagesService;
+         //   _homePageImagesService = homePageImagesService;
             _productFacad = productFacad;
         }
 
-        public IActionResult Index()
+  /*      public IActionResult Index()
         {
 
             HomePageViewModel homePage = new HomePageViewModel()
@@ -47,7 +45,7 @@ namespace EndPoint.Site.Controllers
                 , null, 1, 6, 25).Data.Products,
             };
             return View(homePage);
-        }
+        }*/
 
         public IActionResult Privacy()
         {
