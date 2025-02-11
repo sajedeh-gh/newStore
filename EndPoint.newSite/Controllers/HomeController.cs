@@ -13,6 +13,8 @@ using EndPoint.newSite.Models;
 using newStore.Application.Interfaces.FacadPatterns;
 using newStore.Application.Services.Common.Queries.GetSlider;
 using newStore.Application.Services.Products.Queries.GetProductForSite;
+using newStore.Application.Services.Common.Queries.GetHomePageImages;
+using EndPoint.newSite.Models.ViewModels.HomePages;
 
 namespace EndPoint.newSite.Controllers
 {
@@ -20,21 +22,21 @@ namespace EndPoint.newSite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGetSliderService _getSliderService;
-      //  private readonly IGetHomePageImagesService _homePageImagesService;
+        private readonly IGetHomePageImagesService _homePageImagesService;
         private readonly IProductFacad _productFacad;
 
         public HomeController(ILogger<HomeController> logger
             , IGetSliderService getSliderService
-          //  , IGetHomePageImagesService homePageImagesService
+            , IGetHomePageImagesService homePageImagesService
            , IProductFacad productFacad)
         {
             _logger = logger;
             _getSliderService = getSliderService;
-         //   _homePageImagesService = homePageImagesService;
+            _homePageImagesService = homePageImagesService;
             _productFacad = productFacad;
         }
 
-  /*      public IActionResult Index()
+        public IActionResult Index()
         {
 
             HomePageViewModel homePage = new HomePageViewModel()
@@ -45,7 +47,7 @@ namespace EndPoint.newSite.Controllers
                 , null, 1, 6, 25).Data.Products,
             };
             return View(homePage);
-        }*/
+        }
 
         public IActionResult Privacy()
         {
