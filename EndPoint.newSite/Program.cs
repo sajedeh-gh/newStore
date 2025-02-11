@@ -50,9 +50,6 @@ builder.Services.AddScoped<IGetSliderService, GetSliderService>();
 builder.Services.AddScoped<IAddHomePageImagesService, AddHomePageImagesService>();
 builder.Services.AddScoped<IGetHomePageImagesService, GetHomePageImagesService>();
 
-
-
-
 string connectionString = @"Data Source=DESKTOP-OVLK4EA; Initial Catalog=newStoreDb; Integrated Security=True; TrustServerCertificate=True;";
 builder.Services.AddDbContext<DataBaseContext>(options =>
     options.UseSqlServer(connectionString));
