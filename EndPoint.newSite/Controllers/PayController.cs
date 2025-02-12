@@ -16,6 +16,7 @@ using NuGet.Configuration;
 using Dto.Payment;
 using ZarinPal.Class;
 using newStore.Application.Services.Fainances.Queries.GetRequestPayService;
+using Microsoft.EntityFrameworkCore;
 
 namespace EndPoint.newSite.Controllers
 {
@@ -61,12 +62,16 @@ namespace EndPoint.newSite.Controllers
                 var result = await _payment.Request(new DtoRequest()
                 {
                     Mobile = "09121112222",
-                    CallbackUrl = $"https://localhost:44339/Pay/Verify?guid={requestPay.Data.guid}",
+                    CallbackUrl = $"https://localhost:44347/Pay/Verify?guid={requestPay.Data.guid}",
                     Description = "پرداخت فاکتور شماره:" + requestPay.Data.RequestPayId,
                     Email = requestPay.Data.Email,
                     Amount = requestPay.Data.Amount,
                     MerchantId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
                 }, ZarinPal.Class.Payment.Mode.sandbox);
+                if (string.IsNullOrEmpty(result.Authority))
+                {
+                    throw new Exception("Authority is null or empty from Zarinpal.");
+                }
                 return Redirect($"https://sandbox.zarinpal.com/pg/StartPay/{result.Authority}");
 
 
