@@ -20,6 +20,7 @@ using newStore.Application.Services.Common.Queries.GetHomePageImages;
 using newStore.Application.Services.Carts;
 using newStore.Application.Services.Fainances.Commands.AddRequestPay;
 using newStore.Common.Roles;
+using newStore.Application.Services.Fainances.Queries.GetRequestPayService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,8 @@ builder.Services.AddScoped<IGetHomePageImagesService, GetHomePageImagesService>(
 ///////////////////////////////////////////
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAddRequestPayService, AddRequestPayService>();
+builder.Services.AddScoped<IGetRequestPayService, GetRequestPayService>();
+
 
 
 
