@@ -1,10 +1,7 @@
 ﻿using newStore.Application.Interfaces.Contexts;
+using newStore.Common;
 using newStore.Common.Dto;
 using Microsoft.EntityFrameworkCore;
-using newStore.Application.Services.Users.Commands.UserLogin;
-using newStore.Common;
-using newStore.Application.Services.Users.Commands.UserLogin;
-using newStore.Common;
 
 namespace newStore.Application.Services.Users.Commands.UserLogin
 {
@@ -35,7 +32,7 @@ namespace newStore.Application.Services.Users.Commands.UserLogin
 
             var user = _context.Users
                 .Include(p => p.UserInRoles)
-                .ThenInclude(p=>p.Role)
+                .ThenInclude(p => p.Role)
                 .Where(p => p.Email.Equals(Username)
             && p.IsActive == true)
             .FirstOrDefault();
@@ -49,7 +46,7 @@ namespace newStore.Application.Services.Users.Commands.UserLogin
 
                     },
                     IsSuccess = false,
-                    Message = "کاربری با این ایمیل در سایت فروشگاه ثبت نام نکرده است",
+                    Message = "کاربری با این ایمیل در سایت فروشگاه باگتو ثبت نام نکرده است",
                 };
             }
 
@@ -69,10 +66,10 @@ namespace newStore.Application.Services.Users.Commands.UserLogin
             }
 
 
-            var roles = "";
+            List<string> roles = new List<string>();
             foreach (var item in user.UserInRoles)
             {
-                roles += $"{item.Role.Name}";
+                roles.Add(item.Role.Name);
             }
 
 
@@ -90,7 +87,5 @@ namespace newStore.Application.Services.Users.Commands.UserLogin
 
 
         }
-
-        
     }
 }

@@ -18,8 +18,18 @@ using newStore.Application.Services.Common.Queries.GetSlider;
 using newStore.Application.Services.HomePages.AddHomePageImages;
 using newStore.Application.Services.Common.Queries.GetHomePageImages;
 using newStore.Application.Services.Carts;
+using newStore.Application.Services.Fainances.Commands.AddRequestPay;
+using newStore.Common.Roles;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(UserRoles.Admin, policy => policy.RequireRole(UserRoles.Admin));
+    options.AddPolicy(UserRoles.Customer, policy => policy.RequireRole(UserRoles.Customer));
+    options.AddPolicy(UserRoles.Operator, policy => policy.RequireRole(UserRoles.Operator));
+});
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -28,9 +38,13 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 }).AddCookie(options =>
 {
-    options.LoginPath = new PathString("/");
+    options.LoginPath = new PathString("/Authentication/Signin");
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+    options.AccessDeniedPath = new PathString("/Authentication/Signin");
 });
+
+
+
 
 builder.Services.AddScoped< IDataBaseContext, DataBaseContext>();
 builder.Services.AddScoped<IGetUsersService, GetUsersService>();
@@ -53,9 +67,15 @@ builder.Services.AddScoped<IGetHomePageImagesService, GetHomePageImagesService>(
 
 ///////////////////////////////////////////
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IAddRequestPayService, AddRequestPayService>();
 
 
-string connectionString = @"Data Source=DESKTOP-OVLK4EA; Initial Catalog=newStoreDb; Integrated Security=True; TrustServerCertificate=True;";
+
+
+
+//string connectionString = @"Data Source=DESKTOP-OVLK4EA; Initial Catalog=newStoreDb; Integrated Security=True; TrustServerCertificate=True;";
+string connectionString = @"Data Source=DESKTOP-OVLK4EA; Initial Catalog=newStoreDb; Integrated Security=True; TrustServerCertificate=True; Connect Timeout=60;";
+
 builder.Services.AddDbContext<DataBaseContext>(options =>
     options.UseSqlServer(connectionString));
 // Add services to the container.
@@ -80,8 +100,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 
 app.MapControllerRoute(

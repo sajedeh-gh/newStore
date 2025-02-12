@@ -8,10 +8,13 @@ using newStore.Application.Services.Users.Commands.RgegisterUser;
 using newStore.Application.Services.Users.Commands.UserLogin;
 using newStore.Common.Dto;
 using EndPoint.newSite.Models.ViewModels.AuthenticationViewModel;
+using EndPoint.newSite.Models.ViewModels.AuthenticationViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using EndPoint.newSite.Models.ViewModels.AuthenticationViewModel;
+using newStore.Application.Services.Users.Commands.RgegisterUser;
+using newStore.Application.Services.Users.Commands.UserLogin;
+using newStore.Common.Dto;
 
 namespace EndPoint.newSite.Controllers
 {
@@ -64,7 +67,7 @@ namespace EndPoint.newSite.Controllers
             {
                 return Json(new ResultDto { IsSuccess = true, Message = "ایمیل خودرا به درستی وارد نمایید" });
             }
-           
+
 
             var signeupResult = _registerUserService.Execute(new RequestRegisterUserDto
             {
@@ -87,7 +90,7 @@ namespace EndPoint.newSite.Controllers
                 new Claim(ClaimTypes.Name, request.FullName),
                 new Claim(ClaimTypes.Role, "Customer"),
             };
-           
+
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
@@ -95,8 +98,8 @@ namespace EndPoint.newSite.Controllers
                 {
                     IsPersistent = true
                 };
-               HttpContext.SignInAsync(principal, properties);
- 
+                HttpContext.SignInAsync(principal, properties);
+
             }
             return Json(signeupResult);
         }
@@ -119,8 +122,13 @@ namespace EndPoint.newSite.Controllers
                 new Claim(ClaimTypes.NameIdentifier,signupResult.Data.UserId.ToString()),
                 new Claim(ClaimTypes.Email, Email),
                 new Claim(ClaimTypes.Name, signupResult.Data.Name),
-                new Claim(ClaimTypes.Role, signupResult.Data.Roles ),
+
             };
+                foreach (var item in signupResult.Data.Roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, item));
+                }
+
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
                 var properties = new AuthenticationProperties()
@@ -128,8 +136,8 @@ namespace EndPoint.newSite.Controllers
                     IsPersistent = true,
                     ExpiresUtc = DateTime.Now.AddDays(5),
                 };
-               HttpContext.SignInAsync(principal, properties);
-            
+                HttpContext.SignInAsync(principal, properties);
+
             }
             return Json(signupResult);
         }
@@ -138,7 +146,7 @@ namespace EndPoint.newSite.Controllers
         public IActionResult SignOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-         
+
             return RedirectToAction("Index", "Home");
         }
     }

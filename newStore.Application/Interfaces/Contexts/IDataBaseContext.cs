@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using newStore.Domain.Entities.HomePages;
 using newStore.Domain.Entities.Carts;
+using newStore.Domain.Entities.Finances;
 
 namespace newStore.Application.Interfaces.Contexts
 {
@@ -27,6 +28,8 @@ namespace newStore.Application.Interfaces.Contexts
         DbSet<HomePageImages> HomePageImages { get; set; }
         DbSet<Cart> Carts { get; set; }
         DbSet<CartItem> CartItems { get; set; }
+        DbSet<RequestPay> RequestPays { get; set; }
+
         int SaveChanges(bool acceptAllChangesOnSuccess);
         int SaveChanges();
         Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken());
