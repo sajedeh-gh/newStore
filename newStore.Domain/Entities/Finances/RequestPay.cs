@@ -1,4 +1,5 @@
 ﻿using newStore.Domain.Entities.Commons;
+using newStore.Domain.Entities.Orders;
 using newStore.Domain.Entities.Users;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace newStore.Domain.Entities.Finances
         public DateTime? PayDate { get; set; }
         public string Authority { get; set; }
         public long RefId { get; set; } = 0;
+
+        public virtual ICollection<Order> Orders { get; set; }
 
 
     }

@@ -20,9 +20,9 @@ namespace newStore.Application.Services.Fainances.Commands.AddRequestPay
                 Guid = Guid.NewGuid(),
                 IsPay = false,
                 User = user,
+           
 
             };
-            _context.RequestPays.Add(requestPay);
             _context.SaveChanges();
 
             return new ResultDto<ResultRequestPayDto>()

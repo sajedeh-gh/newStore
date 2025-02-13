@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using newStore.Application.Services.Carts;
 using newStore.Application.Services.Fainances.Commands.AddRequestPay;
+using newStore.Application.Services.Fainances.Queries.GetRequestPayService;
+using newStore.Application.Services.Orders.Commands.AddNewOrder;
 using newStore.Domain.Entities.Carts;
+using Dto.Payment;
+using EndPoint.newSite.Utilities;
 using EndPoint.newSite.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using newStore.Application.Services.Carts;
 using newStore.Application.Services.Fainances.Commands.AddRequestPay;
-using Newtonsoft.Json;
-using NuGet.Configuration;
-using Dto.Payment;
-using ZarinPal.Class;
 using newStore.Application.Services.Fainances.Queries.GetRequestPayService;
-using Microsoft.EntityFrameworkCore;
+using newStore.Application.Services.Orders.Commands.AddNewOrder;
+using Newtonsoft.Json;
+using ZarinPal.Class;
 
 namespace EndPoint.newSite.Controllers
 {
@@ -30,13 +31,13 @@ namespace EndPoint.newSite.Controllers
         private readonly Authority _authority;
         private readonly Transactions _transactions;
         private readonly IGetRequestPayService _getRequestPayService;
-       // private readonly IAddNewOrderService _addNewOrderService;
+        private readonly IAddNewOrderService _addNewOrderService;
 
 
         public PayController(IAddRequestPayService addRequestPayService
             , ICartService cartService
             , IGetRequestPayService getRequestPayService
-           // , IAddNewOrderService addNewOrderService
+            , IAddNewOrderService addNewOrderService
 
              )
         {
@@ -48,7 +49,7 @@ namespace EndPoint.newSite.Controllers
             _authority = expose.CreateAuthority();
             _transactions = expose.CreateTransactions();
             _getRequestPayService = getRequestPayService;
-         //   _addNewOrderService = addNewOrderService;
+            _addNewOrderService = addNewOrderService;
         }
         public async Task<IActionResult> Index()
         {
@@ -62,16 +63,12 @@ namespace EndPoint.newSite.Controllers
                 var result = await _payment.Request(new DtoRequest()
                 {
                     Mobile = "09121112222",
-                    CallbackUrl = $"https://localhost:44347/Pay/Verify?guid={requestPay.Data.guid}",
+                    CallbackUrl = $"https://localhost:44339/Pay/Verify?guid={requestPay.Data.guid}",
                     Description = "پرداخت فاکتور شماره:" + requestPay.Data.RequestPayId,
                     Email = requestPay.Data.Email,
                     Amount = requestPay.Data.Amount,
                     MerchantId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
                 }, ZarinPal.Class.Payment.Mode.sandbox);
-                if (string.IsNullOrEmpty(result.Authority))
-                {
-                    throw new Exception("Authority is null or empty from Zarinpal.");
-                }
                 return Redirect($"https://sandbox.zarinpal.com/pg/StartPay/{result.Authority}");
 
 
@@ -95,9 +92,28 @@ namespace EndPoint.newSite.Controllers
                 Authority = authority
             }, Payment.Mode.sandbox);
 
+
+            //var client = new RestClient("https://www.zarinpal.com/pg/rest/WebGate/PaymentVerification.json");
+            //client.Timeout = -1;
+            //var request = new RestRequest(Method.POST);
+            //request.AddHeader("Content-Type", "application/json");
+            //request.AddParameter("application/json", $"{{\"MerchantID\" :\"{merchendId}\",\"Authority\":\"{Authority}\",\"Amount\":\"{10000}\"}}", ParameterType.RequestBody);
+            //IRestResponse response = client.Execute(request);
+            //VerificationPayResultDto verification = JsonConvert.DeserializeObject<VerificationPayResultDto>(response.Content);
+            long? UserId = ClaimUtility.GetUserId(User);
+            var cart = _cartService.GetMyCart(_cookiesManeger.GetBrowserId(HttpContext), UserId);
+
             if (verification.Status == 100)
             {
+                _addNewOrderService.Execute(new RequestAddNewOrderSericeDto
+                {
+                    CartId = cart.Data.CartId,
+                    UserId = UserId.Value,
+                    RequestPayId = requestPay.Data.Id
+                });
 
+                //redirect to orders
+                return RedirectToAction("Index", "Orders");
             }
             else
             {
@@ -105,41 +121,13 @@ namespace EndPoint.newSite.Controllers
             }
 
             return View();
-            /*
-
-                        //var client = new RestClient("https://www.zarinpal.com/pg/rest/WebGate/PaymentVerification.json");
-                        //client.Timeout = -1;
-                        //var request = new RestRequest(Method.POST);
-                        //request.AddHeader("Content-Type", "application/json");
-                        //request.AddParameter("application/json", $"{{\"MerchantID\" :\"{merchendId}\",\"Authority\":\"{Authority}\",\"Amount\":\"{10000}\"}}", ParameterType.RequestBody);
-                        //IRestResponse response = client.Execute(request);
-                        //VerificationPayResultDto verification = JsonConvert.DeserializeObject<VerificationPayResultDto>(response.Content);
-                        long? UserId = ClaimUtility.GetUserId(User);
-                        var cart = _cartService.GetMyCart(_cookiesManeger.GetBrowserId(HttpContext), UserId);
-
-                        if (verification.Status == 100)
-                        {
-                            _addNewOrderService.Execute(new RequestAddNewOrderSericeDto
-                            {
-                                CartId = cart.Data.CartId,
-                                UserId = UserId.Value,
-                                RequestPayId = requestPay.Data.Id
-                            });
-
-                            //redirect to orders
-                            return RedirectToAction("Index", "Orders");
-                        }
-            */
-
         }
     }
 
 
-  /*  public class VerificationPayResultDto
+    public class VerificationPayResultDto
     {
         public int Status { get; set; }
         public long RefID { get; set; }
-    }*/
-
-
+    }
 }

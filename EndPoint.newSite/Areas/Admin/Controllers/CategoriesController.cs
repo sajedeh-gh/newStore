@@ -4,12 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using newStore.Application.Interfaces.FacadPatterns;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using newStore.Application.Interfaces.FacadPatterns;
 
 namespace EndPoint.newSite.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
+    [Authorize("Operator")]
     public class CategoriesController : Controller
     {
 

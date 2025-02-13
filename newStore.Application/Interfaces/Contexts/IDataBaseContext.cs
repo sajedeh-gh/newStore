@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using newStore.Domain.Entities.HomePages;
 using newStore.Domain.Entities.Carts;
 using newStore.Domain.Entities.Finances;
+using newStore.Domain.Entities.Orders;
 
 namespace newStore.Application.Interfaces.Contexts
 {
@@ -29,6 +30,8 @@ namespace newStore.Application.Interfaces.Contexts
         DbSet<Cart> Carts { get; set; }
         DbSet<CartItem> CartItems { get; set; }
         DbSet<RequestPay> RequestPays { get; set; }
+        DbSet<Order> Orders { get; set; }
+        DbSet<OrderDetail> OrderDetails { get; set; }
 
         int SaveChanges(bool acceptAllChangesOnSuccess);
         int SaveChanges();
